@@ -1,0 +1,119 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@theme {
+  --font-sans: "Figtree", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Oswald", ui-sans-serif, system-ui, sans-serif;
+
+  --color-bg: #07090d;
+  --color-surface: #10151d;
+  --color-raised: #171e28;
+  --color-fg: #f2f4f7;
+  --color-muted: #8b95a5;
+  --color-faint: #5c6573;
+  --color-border: #252d3a;
+  --color-accent: #d20a11;
+  --color-accent-fg: #ffffff;
+  --color-pitch: #2a7a52;
+  --color-ring: #d20a11;
+
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 28px;
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background: var(--color-bg);
+    color: var(--color-fg);
+  }
+
+  body {
+    min-height: 100dvh;
+    background: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+    font-family: var(--font-display);
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
+@keyframes pulse-live {
+  0%,
+  100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+@keyframes score-pop {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+
+@keyframes event-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes event-bar {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+
+.live-dot {
+  animation: pulse-live 1.4s ease-in-out infinite;
+}
+
+.score-hot {
+  animation: score-pop 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.event-card {
+  animation: event-in 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.event-mark {
+  transform-origin: top;
+  animation: event-bar 280ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.passport-scene {
+  perspective: 900px;
+}
+
+.passport-spin {
+  transform-style: preserve-3d;
+  animation: passport-turn 9s linear infinite;
+}
+
+@keyframes passport-turn {
+  to { transform: rotateY(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
