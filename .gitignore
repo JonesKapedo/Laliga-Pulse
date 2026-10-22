@@ -1,5 +1,8 @@
 node_modules/
-.project_id
-.github_repo
+dist/
+.output/
+.nitro/
+.vercel/
 .env
 .env.*
+!.env.example

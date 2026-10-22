@@ -16,6 +16,7 @@ import { Route as RankRouteImport } from './routes/rank'
 import { Route as SeasonRouteImport } from './routes/season'
 import { Route as StandRouteImport } from './routes/stand'
 import { Route as VerdictRouteImport } from './routes/verdict'
+import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -52,6 +53,11 @@ const VerdictRoute = VerdictRouteImport.update({
   path: '/verdict',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -61,6 +67,7 @@ export interface FileRoutesByFullPath {
   '/season': typeof SeasonRoute
   '/stand': typeof StandRoute
   '/verdict': typeof VerdictRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -70,6 +77,7 @@ export interface FileRoutesByTo {
   '/season': typeof SeasonRoute
   '/stand': typeof StandRoute
   '/verdict': typeof VerdictRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -80,13 +88,29 @@ export interface FileRoutesById {
   '/season': typeof SeasonRoute
   '/stand': typeof StandRoute
   '/verdict': typeof VerdictRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/board' | '/match' | '/rank' | '/season' | '/stand' | '/verdict'
+    | '/'
+    | '/board'
+    | '/match'
+    | '/rank'
+    | '/season'
+    | '/stand'
+    | '/verdict'
+    | '/api/auth/$'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/board' | '/match' | '/rank' | '/season' | '/stand' | '/verdict'
+  to:
+    | '/'
+    | '/board'
+    | '/match'
+    | '/rank'
+    | '/season'
+    | '/stand'
+    | '/verdict'
+    | '/api/auth/$'
   id:
     | '__root__'
     | '/'
@@ -96,6 +120,7 @@ export interface FileRouteTypes {
     | '/season'
     | '/stand'
     | '/verdict'
+    | '/api/auth/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -106,6 +131,7 @@ export interface RootRouteChildren {
   SeasonRoute: typeof SeasonRoute
   StandRoute: typeof StandRoute
   VerdictRoute: typeof VerdictRoute
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -159,6 +185,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VerdictRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -170,6 +203,7 @@ const rootRouteChildren: RootRouteChildren = {
   SeasonRoute: SeasonRoute,
   StandRoute: StandRoute,
   VerdictRoute: VerdictRoute,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

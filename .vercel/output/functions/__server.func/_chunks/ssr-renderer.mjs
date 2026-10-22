@@ -1,4 +1,4 @@
-import { a as toRequest, n as HTTPError } from "../_libs/h3+rou3+srvx.mjs";
+import { i as toRequest, n as HTTPError } from "../_libs/h3+rou3+srvx.mjs";
 //#region #nitro/virtual/vite-services
 function lazyService(loader) {
 	let promise, mod;
@@ -8,7 +8,7 @@ function lazyService(loader) {
 		return promise.then((mod) => mod.fetch(req));
 	} };
 }
-var viteServices = { ["ssr"]: lazyService(() => import("../_ssr/ssr.mjs").then((n) => n.t)) };
+var viteServices = { ["ssr"]: lazyService(() => import("../_ssr/ssr.mjs").then((n) => n.n)) };
 //#endregion
 //#region node_modules/nitro/dist/runtime/vite.mjs
 function fetchViteEnv(viteEnvName, input, init) {

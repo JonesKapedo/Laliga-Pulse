@@ -120,6 +120,7 @@ function StandPage() {
         </form>
       </section>
       <ForecastCard />
+      </div>
     </div>
   );
 }
