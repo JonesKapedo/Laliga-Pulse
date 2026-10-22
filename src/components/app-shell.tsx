@@ -57,7 +57,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               <span className="block font-display text-[11px] tracking-[0.22em] text-muted uppercase">
                 LALIGA
               </span>
-              <span className="font-display text-lg tracking-wide">PULSE</span>
+              <span className="font-display text-lg tracking-wide">MOSAICO</span>
             </span>
           </Link>
 

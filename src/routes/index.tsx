@@ -66,7 +66,7 @@ function Home() {
           <div className="mt-6 flex flex-wrap gap-2">
             <Button asChild>
               <Link to="/match">
-                Enter the Pulse Room <ArrowRight className="size-4" />
+                Take your tile <ArrowRight className="size-4" />
               </Link>
             </Button>
             <Button variant="outline" asChild>
@@ -166,7 +166,7 @@ function Home() {
           <div className="rounded-xl border border-border bg-surface p-5">
             <SectionLabel>Your shirt</SectionLabel>
             <p className="mt-2 text-sm text-muted">
-              Pulse follows the club you walk with. This is identity, not a bet.
+              Mosaico follows the club you walk with. This is identity, not a bet.
             </p>
             <div className="mt-3 grid grid-cols-4 gap-2">
               {(Object.keys(CLUBS) as ClubId[]).map((id) => (
@@ -231,7 +231,7 @@ function Home() {
         {[
           {
             t: "Call the night",
-            d: "Timed moments through the ninety. One voice. Official Fan Pulse.",
+            d: "Timed moments through the ninety. One stand, one picture.",
           },
           {
             t: "Belong to the stand",

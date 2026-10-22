@@ -1,6 +1,6 @@
 # Project guide
 
-LALIGA Pulse is a standalone fan-engagement prototype built with TanStack Start
+LALIGA Mosaico (every fan is a tile) is a standalone fan-engagement prototype built with TanStack Start
 (React 19), Tailwind CSS v4, Zustand, and optional Better Auth + Postgres. It
 must remain deployable with no platform-specific runtime services.
 

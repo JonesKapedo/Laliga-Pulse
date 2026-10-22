@@ -175,7 +175,7 @@ export const MOMENTS: PulseMoment[] = [
     minuteLabel: "8'",
     heading: "The first opening",
     question: "That was the first real sight of goal. What did you see?",
-    note: "Call it as you saw it. The Pulse is the stand talking in one voice.",
+    note: "Call it as you saw it. The Heat is the stand talking in one voice.",
     options: [
       { id: "should", label: "He has to score that", call: "That's the opener.", share: 51 },
       { id: "keeper", label: "The keeper earned it", call: "Big stop.", share: 33 },
@@ -232,7 +232,7 @@ export const MOMENTS: PulseMoment[] = [
     minuteLabel: "Half-time",
     heading: "Dressing-room talk",
     question: "What does the dressing room need at the break?",
-    note: "The Pulse at half-time is the conversation in the concourse, made official.",
+    note: "The Heat at half-time is the conversation in the concourse, made official.",
     options: [
       { id: "calm", label: "Calm heads", call: "We're in this.", share: 39 },
       { id: "bite", label: "More bite", call: "Win the second balls.", share: 42 },
@@ -321,7 +321,7 @@ export const SEASON_ARC = [
   {
     week: "MD8",
     title: "A night in San Mamés",
-    body: "Athletic made the league look like a cup tie. The Pulse called it early: more bite, not more pretty.",
+    body: "Athletic made the league look like a cup tie. Mosaico called it early: more bite, not more pretty.",
   },
   {
     week: "MD9",
@@ -345,7 +345,7 @@ export const MISSIONS = [
   {
     id: "m2",
     title: "Call the ninety",
-    detail: "Lock in at least four Pulse moments in one match.",
+    detail: "Lock in at least four Moments in one match.",
     points: 800,
   },
   {
@@ -382,7 +382,7 @@ export const ECHOES = [
     id: "echo-2",
     when: "A year ago tonight",
     match: "Barcelona 3–0 Sevilla",
-    verdict: "The Pulse named the right flank before kick-off. The night agreed.",
+    verdict: "Mosaico named the right flank before kick-off. The night agreed.",
   },
 ];
 
