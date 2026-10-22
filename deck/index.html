@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>LALIGA Mosaico — Beyond The Match Challenge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#07090d; --surface:#10151d; --raised:#171e28; --fg:#f2f4f7;
+    --muted:#8b95a5; --faint:#5c6573; --border:#252d3a;
+    --accent:#d20a11; --pitch:#2a7a52;
+    --display:"Oswald","Arial Narrow",Impact,sans-serif;
+    --sans:"Figtree",ui-sans-serif,system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--fg);font-family:var(--sans);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .slide{
+    position:relative;width:13.333in;height:7.5in;padding:.62in .8in;
+    background:var(--bg);overflow:hidden;page-break-after:always;break-after:page;
+    display:flex;flex-direction:column;
+  }
+  .slide:last-child{page-break-after:auto;break-after:auto}
+  .slide::after{
+    content:"";position:absolute;left:0;bottom:0;width:100%;height:6px;
+    background:linear-gradient(90deg,var(--accent) 0 22%,transparent 22%);
+  }
+  .kicker{font-family:var(--display);font-size:11pt;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+  .pageno{position:absolute;right:.8in;bottom:.4in;font-family:var(--display);font-size:10pt;color:var(--faint);letter-spacing:.14em}
+  h1{font-family:var(--display);font-weight:700;line-height:.98;letter-spacing:-.01em}
+  h2{font-family:var(--display);font-weight:600;font-size:30pt;line-height:1.02;margin:.14in 0 0}
+  h3{font-family:var(--display);font-weight:600;font-size:15pt;letter-spacing:.01em}
+  p{font-size:12pt;line-height:1.5;color:#c7cedb}
+  .muted{color:var(--muted)}
+  .accent{color:var(--accent)}
+  .pitch{color:var(--pitch)}
+  .rule{height:1px;background:var(--border);margin:.22in 0}
+  .grid{display:grid;gap:.18in}
+  .g2{grid-template-columns:1fr 1fr}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g4{grid-template-columns:repeat(4,1fr)}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:.2in}
+  .card h3{margin-bottom:.06in}
+  .card p{font-size:10.5pt;line-height:1.42}
+  .pill{display:inline-block;font-family:var(--display);font-size:9pt;letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--border);border-radius:999px;padding:4px 10px;color:var(--muted)}
+  .pill.on{border-color:var(--accent);color:#fff;background:rgba(210,10,17,.16)}
+  .big{font-family:var(--display);font-size:54pt;line-height:.9;letter-spacing:-.01em}
+  .huge{font-family:var(--display);font-size:84pt;line-height:.86;letter-spacing:-.02em}
+  .tag{display:inline-flex;align-items:center;gap:.06in;font-size:9.5pt;color:var(--muted)}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);display:inline-block}
+  .dot.p{background:var(--pitch)}
+  table{width:100%;border-collapse:collapse;font-size:10.5pt}
+  th,td{text-align:left;padding:.085in .08in;border-bottom:1px solid var(--border);vertical-align:top}
+  th{font-family:var(--display);font-size:9pt;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:500}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+  .loop{display:flex;align-items:center;gap:.1in;margin-top:.2in}
+  .loop .step{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:.16in .14in;text-align:center}
+  .loop .step b{display:block;font-family:var(--display);font-size:14pt;margin-bottom:.04in}
+  .loop .step span{font-size:9pt;color:var(--muted);line-height:1.35;display:block}
+  .arrow{color:var(--faint);font-size:16pt}
+  .split{display:grid;grid-template-columns:1.05fr .95fr;gap:.35in;align-items:start}
+  .ul{list-style:none}
+  .ul li{position:relative;padding-left:.2in;margin:.07in 0;font-size:11pt;line-height:1.4;color:#c7cedb}
+  .ul li::before{content:"";position:absolute;left:0;top:.075in;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+  .ul.p li::before{background:var(--pitch)}
+  .footer{position:absolute;left:.8in;bottom:.4in;font-size:8.5pt;color:var(--faint);letter-spacing:.04em}
+  .cover{justify-content:center}
+  .cover .brand{position:absolute;top:.55in;left:.8in;font-family:var(--display);font-size:10pt;letter-spacing:.34em;text-transform:uppercase;color:var(--muted)}
+  .cover-grid{display:grid;grid-template-columns:1.18fr .82fr;gap:.4in;align-items:center}
+  .mosaic{display:grid;grid-template-columns:repeat(11,1fr);gap:5px;width:100%;max-width:4.1in;margin-left:auto}
+  .mosaic i{display:block;aspect-ratio:1;border-radius:2px;background:#40506a}
+  .mosaic i.on{background:var(--accent);opacity:1;box-shadow:0 0 10px rgba(210,10,17,.45)}
+  .mosaic-cap{font-size:9pt;color:var(--faint);letter-spacing:.04em;margin-top:.14in;text-align:right}
+  .wordmark{font-family:var(--display);font-weight:700;letter-spacing:.08em}
+  .cover .meta{position:absolute;bottom:.55in;left:.8in;right:.8in;display:flex;justify-content:space-between;font-size:9.5pt;color:var(--muted)}
+  .callout{background:linear-gradient(135deg,rgba(210,10,17,.18),rgba(210,10,17,.02));border:1px solid rgba(210,10,17,.4);border-radius:12px;padding:.2in}
+  .kpi{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:.16in}
+  .kpi .v{font-family:var(--display);font-size:26pt;line-height:1;margin:.05in 0 .03in}
+  .kpi .l{font-size:9.5pt;color:var(--muted);line-height:1.3}
+  .kpi .e{font-size:8.5pt;color:var(--faint);margin-top:.07in}
+  @page{size:13.333in 7.5in;margin:0}
+  @media screen{
+    body{display:flex;flex-direction:column;align-items:center;gap:18px;padding:18px}
+    .slide{box-shadow:0 12px 40px rgba(0,0,0,.55)}
+  }
+</style>
+</head>
+<body>
+
+<!-- 1 -->
+<section class="slide cover">
+  <div class="brand">LALIGA <span class="wordmark">MOSAICO</span></div>
+  <div class="cover-grid">
+    <div>
+      <p class="kicker">Beyond The Match Challenge · LALIGA × Ignyte</p>
+      <h1 style="font-size:64pt;margin-top:.16in">Every fan<br>is a <span class="accent">tile</span>.</h1>
+      <p style="font-size:15pt;margin-top:.16in;color:#c7cedb">Together, the picture.</p>
+      <p style="font-size:12.5pt;max-width:6.3in;margin-top:.16in;color:#aab3c2">
+        A season-long participation layer. Every call a fan makes adds a tile to a record
+        that is theirs. At full time the stand's calls resolve into one image — and the
+        league gets a live read of the people watching.
+      </p>
+      <div style="margin-top:.24in;display:flex;gap:.1in;flex-wrap:wrap">
+        <span class="pill on">In-match</span><span class="pill on">Community</span>
+        <span class="pill on">Narrative</span><span class="pill on">Extended</span>
+      </div>
+      <p class="muted" style="font-size:9pt;margin-top:.14in">Points only · no wagering · no stakes</p>
+    </div>
+    <div>
+      <div class="mosaic"><i class="on"></i><i style="opacity:0.42"></i><i style="opacity:0.42"></i><i style="opacity:0.42"></i><i style="opacity:0.22"></i><i style="opacity:0.18"></i><i style="opacity:0.42"></i><i style="opacity:0.18"></i><i style="opacity:0.15"></i><i style="opacity:0.42"></i><i class="on"></i><i class="on"></i><i class="on"></i><i style="opacity:0.26"></i><i style="opacity:0.18"></i><i style="opacity:0.15"></i><i style="opacity:0.12"></i><i style="opacity:0.36"></i><i style="opacity:0.42"></i><i style="opacity:0.18"></i><i class="on"></i><i class="on"></i><i class="on"></i><i style="opacity:0.12"></i><i class="on"></i><i style="opacity:0.15"></i><i style="opacity:0.12"></i><i style="opacity:0.12"></i><i style="opacity:0.22"></i><i style="opacity:0.22"></i><i class="on"></i><i style="opacity:0.12"></i><i class="on"></i><i class="on"></i><i style="opacity:0.42"></i><i style="opacity:0.30"></i><i class="on"></i><i style="opacity:0.42"></i><i style="opacity:0.22"></i><i style="opacity:0.22"></i><i class="on"></i><i style="opacity:0.26"></i><i style="opacity:0.42"></i><i class="on"></i><i class="on"></i><i style="opacity:0.12"></i><i style="opacity:0.15"></i><i style="opacity:0.42"></i><i class="on"></i><i style="opacity:0.26"></i><i class="on"></i><i style="opacity:0.36"></i><i style="opacity:0.15"></i><i style="opacity:0.26"></i><i class="on"></i><i class="on"></i><i style="opacity:0.30"></i><i style="opacity:0.22"></i><i style="opacity:0.26"></i><i style="opacity:0.12"></i><i class="on"></i><i style="opacity:0.15"></i><i style="opacity:0.15"></i><i style="opacity:0.36"></i><i style="opacity:0.15"></i><i class="on"></i><i class="on"></i><i style="opacity:0.26"></i><i style="opacity:0.36"></i><i style="opacity:0.15"></i><i style="opacity:0.12"></i><i style="opacity:0.12"></i><i style="opacity:0.22"></i><i style="opacity:0.22"></i><i style="opacity:0.12"></i><i style="opacity:0.42"></i><i class="on"></i><i class="on"></i><i style="opacity:0.36"></i><i style="opacity:0.36"></i><i style="opacity:0.36"></i><i style="opacity:0.15"></i><i style="opacity:0.22"></i><i style="opacity:0.26"></i><i style="opacity:0.30"></i><i style="opacity:0.15"></i><i style="opacity:0.26"></i><i class="on"></i><i class="on"></i><i style="opacity:0.30"></i><i style="opacity:0.12"></i><i style="opacity:0.36"></i><i style="opacity:0.15"></i><i style="opacity:0.18"></i><i style="opacity:0.22"></i><i style="opacity:0.15"></i><i style="opacity:0.12"></i><i style="opacity:0.12"></i><i class="on"></i><i class="on"></i><i style="opacity:0.42"></i><i style="opacity:0.42"></i><i style="opacity:0.18"></i><i style="opacity:0.22"></i><i style="opacity:0.42"></i><i style="opacity:0.22"></i><i style="opacity:0.18"></i><i style="opacity:0.36"></i><i style="opacity:0.36"></i><i class="on"></i><i class="on"></i><i style="opacity:0.15"></i><i style="opacity:0.36"></i><i style="opacity:0.36"></i><i style="opacity:0.22"></i><i style="opacity:0.12"></i><i style="opacity:0.26"></i><i style="opacity:0.26"></i><i style="opacity:0.12"></i><i style="opacity:0.22"></i><i class="on"></i></div>
+      <p class="mosaic-cap">12,480 calls · one picture<br>The Reveal · full time</p>
+    </div>
+  </div>
+  <div class="meta"><span>Product concept &amp; execution plan</span><span>October 2026</span></div>
+</section>
+
+<!-- 2 -->
+<section class="slide">
+  <p class="kicker">01 · Why now</p>
+  <h2>Football built the world's best 90 minutes.<br>Then it left fans with nothing to <span class="accent">do</span>.</h2>
+  <div class="split" style="margin-top:.3in">
+    <div>
+      <p>Consumption is solved. Participation is not. The second screen is where the
+      next generation already lives — but the league's relationship with them still ends
+      at the final whistle.</p>
+      <div class="rule"></div>
+      <ul class="ul">
+        <li><b>One-off activations don't compound.</b> A poll, a giveaway, a matchday stunt — each one starts from zero.</li>
+        <li><b>No identity, no return.</b> If nothing carries between matches, Tuesday has no reason to open the app.</li>
+        <li><b>The brief agrees:</b> LALIGA asked for a structural asset, not an isolated feature.</li>
+      </ul>
+    </div>
+    <div class="grid g2">
+      <div class="kpi"><div class="v">90'</div><div class="l">of attention per match, already won</div><div class="e">The asset is attention, not reach</div></div>
+      <div class="kpi"><div class="v">0</div><div class="l">things a fan's opinion changes today</div><div class="e">Participation is passive</div></div>
+      <div class="kpi"><div class="v">6 days</div><div class="l">between matches with no product</div><div class="e">The retention gap</div></div>
+      <div class="kpi"><div class="v">1</div><div class="l">relationship to build: LALIGA ↔ fan</div><div class="e">Direct, not via a platform</div></div>
+    </div>
+  </div>
+  <div class="footer">Sources: challenge brief (structural vision); product thesis.</div>
+  <div class="pageno">02</div>
+</section>
+
+<!-- 3 -->
+<section class="slide">
+  <p class="kicker">02 · Concept summary</p>
+  <h2>One line: <span class="accent">a fan reputation layer</span> that runs all season.</h2>
+  <div class="split" style="margin-top:.26in">
+    <div>
+      <p>Fans call what happens in the match — predictions, votes, the moment of the
+      night — and earn a public reputation that follows them across matches, clubs and
+      the season. Every call lands as a tile; the season is the mosaic they built.
+      They compete as individuals, as club stands, and as small blocks.</p>
+      <div class="rule"></div>
+      <p class="muted" style="font-size:11pt">The league gets three assets it cannot buy elsewhere:</p>
+      <ul class="ul" style="margin-top:.08in">
+        <li>A <b>fan preference graph</b> — what the stand expects, moment by moment.</li>
+        <li>A <b>new broadcast metric</b> — The Heat, argued about on air.</li>
+        <li><b>Sponsor inventory</b> attached to genuine attention, not impressions.</li>
+      </ul>
+    </div>
+    <div class="grid" style="align-content:start">
+      <div class="card"><h3 class="accent">In-match participation</h3><p>Timed Moments and micro-predictions through the ninety.</p></div>
+      <div class="card"><h3 class="accent">Structured community</h3><p>Club stands and blocks with their own standing and status.</p></div>
+      <div class="card"><h3 class="accent">Data &amp; narrative</h3><p>A proprietary Heat index that gives commentators a second storyline.</p></div>
+      <div class="card"><h3 class="accent">Extended experience</h3><p>Missions, arcs and echoes that make Tuesday part of the season.</p></div>
+    </div>
+  </div>
+  <div class="footer">All four opportunity areas, one loop — not four features.</div>
+  <div class="pageno">03</div>
+</section>
+
+<!-- 4 -->
+<section class="slide">
+  <p class="kicker">03 · How it works</p>
+  <h2>The loop that makes it structural.</h2>
+  <div class="loop">
+    <div class="step"><b>Predict</b><span>30–60s micro-calls before and during the match</span></div>
+    <div class="arrow">→</div>
+    <div class="step"><b>Play</b><span>Live moments, votes and parallel challenges</span></div>
+    <div class="arrow">→</div>
+    <div class="step"><b>Prove</b><span>Server-resolved scoring from the official feed</span></div>
+    <div class="arrow">→</div>
+    <div class="step"><b>Progress</b><span>Badges, levels and season rank that persist</span></div>
+    <div class="arrow">→</div>
+    <div class="step"><b>Belong</b><span>Club stand and block leaderboards</span></div>
+  </div>
+  <div class="grid g3" style="margin-top:.3in">
+    <div class="card"><h3>Why fans return</h3><p>Reputation is an asset. Switching costs are emotional, not technical: your standing lives here.</p></div>
+    <div class="card"><h3>Why the league keeps it</h3><p>It compounds. Every match adds data, history and a reason to open the app on a quiet Tuesday.</p></div>
+    <div class="card"><h3>Why it scales</h3><p>One loop, any club, any language. Local blocks make it feel local while the model stays global.</p></div>
+  </div>
+  <div class="callout" style="margin-top:.24in">
+    <p style="font-size:11.5pt"><b class="accent">Points only.</b> No stakes, no odds, no cash-out. Participation is the product — which keeps the experience clear of gambling regulation and keeps the league's voice clean.</p>
+  </div>
+  <div class="pageno">04</div>
+</section>
+
+<!-- 5 -->
+<section class="slide">
+  <p class="kicker">04 · Prototype scope</p>
+  <h2>What is <span class="pitch">live</span> at Demo Day — and what is deliberately <span class="muted">conceptual</span>.</h2>
+  <div class="grid g2" style="margin-top:.26in">
+    <div class="card" style="border-color:rgba(42,122,82,.6)">
+      <h3 class="pitch">Live, working now</h3>
+      <ul class="ul p" style="margin-top:.08in">
+        <li>Ritual and club identity; the fan enters the night, not a form.</li>
+        <li>Vote on real Moments with a <b>live aggregate tally</b> and one-vote-per-fan guard.</li>
+        <li>Predictions and points; season reputation and rank that persist across matches.</li>
+        <li>Global, club and <b>block</b> leaderboards — blocks can be created and joined by code.</li>
+        <li>Reveal card, EN/ES toggle, installable PWA, offline fallback.</li>
+        <li>A real Postgres schema (Neon free tier) with an append-only events table as the source of truth.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3 class="muted">Conceptual at this stage</h3>
+      <ul class="ul" style="margin-top:.08in">
+        <li>Official LALIGA SSO and app-tab embedding.</li>
+        <li>Live rights-cleared match feed (adapter contract defined).</li>
+        <li>Broadcast lower-third and stadium ribbon integrations.</li>
+        <li>Sponsor contracts and production ad-serving.</li>
+        <li>Full ES/EN/AR localization with RTL.</li>
+        <li>Production anti-fraud and anomaly detection.</li>
+      </ul>
+    </div>
+  </div>
+  <p class="muted" style="margin-top:.2in;font-size:10.5pt">We chose a narrow, honest prototype: the loop and its evidence are real; the league integrations are scoped, not pretended.</p>
+  <div class="pageno">05</div>
+</section>
+
+<!-- 6 -->
+<section class="slide">
+  <p class="kicker">05 · In-match</p>
+  <h2>Make the ninety <span class="accent">participatory</span>, moment by moment.</h2>
+  <div class="split" style="margin-top:.24in">
+    <div>
+      <p>A Moment is a timed question tied to the match state: hold the line, who
+      scores next, was that a red? Fans answer in seconds; the stand's answer appears as
+      an aggregate, never as a named user.</p>
+      <div class="rule"></div>
+      <div class="grid g2">
+        <div class="kpi"><div class="v">4.6</div><div class="l">calls per fan per match (model)</div><div class="e">Recurring, not a single poll</div></div>
+        <div class="kpi"><div class="v">60s</div><div class="l">to first meaningful action</div><div class="e">No account wall before value</div></div>
+      </div>
+      <p style="margin-top:.16in" class="muted">Timing is the craft: questions land on corners, cards and substitutions, not on a timer.</p>
+    </div>
+    <div class="card" style="padding:.24in">
+      <span class="pill on">Moment · 41'</span>
+      <h3 style="margin-top:.14in;font-size:20pt">Hold the line, or break it?</h3>
+      <div style="margin-top:.14in;display:grid;gap:.08in">
+        <div style="border:1px solid var(--accent);border-radius:8px;padding:.1in .12in">
+          <div style="display:flex;justify-content:space-between;font-size:11pt"><span>Hold</span><span class="accent">58%</span></div>
+          <div style="height:4px;background:#0b0f15;border-radius:99px;margin-top:.06in"><div style="width:58%;height:100%;background:var(--accent);border-radius:99px"></div></div>
+        </div>
+        <div style="border:1px solid var(--border);border-radius:8px;padding:.1in .12in">
+          <div style="display:flex;justify-content:space-between;font-size:11pt"><span>Break</span><span class="muted">42%</span></div>
+          <div style="height:4px;background:#0b0f15;border-radius:99px;margin-top:.06in"><div style="width:42%;height:100%;background:var(--faint);border-radius:99px"></div></div>
+        </div>
+      </div>
+      <p class="muted" style="margin-top:.14in;font-size:9pt">Live aggregate · 12,480 calls · Official Heat read</p>
+    </div>
+  </div>
+  <div class="grid g3" style="margin-top:.3in">
+    <div class="card"><h3>The Moment</h3><p>One question tied to match state, open for seconds. Timing is the craft, not a countdown.</p></div>
+    <div class="card"><h3>The Reveal</h3><p>At full time the night's calls resolve into one image. Aggregate only, never a name.</p></div>
+    <div class="card"><h3>The Tile</h3><p>Every call is a tile in the fan's season record — a reputation you can see, not a streak badge.</p></div>
+  </div>
+  <div class="pageno">06</div>
+</section>
+
+<!-- 7 -->
+<section class="slide">
+  <p class="kicker">06 · Belonging &amp; narrative</p>
+  <h2>Rank is earned. Narrative is <span class="accent">shared</span>.</h2>
+  <div class="grid g3" style="margin-top:.26in">
+    <div class="card"><h3>Blocks</h3><p>A bar, a group chat, a city. Join by code; the block has its own standing. Local identity inside a global league.</p></div>
+    <div class="card"><h3>Season reputation</h3><p>Levels and titles carry across matches. Rank is never bought, never gambled — only earned by showing up.</p></div>
+    <div class="card"><h3>The Reveal card</h3><p>After the whistle, a shareable record of what the stand called. The league's voice leaving the app.</p></div>
+  </div>
+  <div class="split" style="margin-top:.26in">
+    <div>
+      <h3 class="accent" style="margin-bottom:.08in">The Heat index</h3>
+      <p>A new, proprietary number: temperature, pressure and how settled the stand is,
+      blended into one figure. Commentators can quote it, argue with it, and build a
+      second storyline around it — free of charge, every match.</p>
+      <p class="muted" style="margin-top:.1in;font-size:10.5pt">This is the data-narrative layer: not more stats about players, but a live read of the people watching.</p>
+    </div>
+    <div class="card" style="display:flex;align-items:center;gap:.3in">
+      <div>
+        <p class="kicker" style="font-size:9pt">Night read</p>
+        <div class="big accent" style="margin-top:.05in">73</div>
+        <p class="muted" style="font-size:9.5pt">One league number.<br>Not a betting line.</p>
+      </div>
+      <div style="flex:1">
+        <div style="height:6px;background:#0b0f15;border-radius:99px;margin:.08in 0"><div style="width:73%;height:100%;background:var(--accent);border-radius:99px"></div></div>
+        <div style="height:6px;background:#0b0f15;border-radius:99px;margin:.08in 0"><div style="width:61%;height:100%;background:var(--pitch);border-radius:99px"></div></div>
+        <div style="height:6px;background:#0b0f15;border-radius:99px;margin:.08in 0"><div style="width:84%;height:100%;background:var(--faint);border-radius:99px"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="callout" style="margin-top:.26in">
+    <p style="font-size:11.5pt"><b class="accent">Take your tile.</b> The Reveal card is the share unit: a picture of the stand, not a brag about one fan.</p>
+  </div>
+  <div class="pageno">07</div>
+</section>
+
+<!-- 8 -->
+<section class="slide">
+  <p class="kicker">07 · Integration plan</p>
+  <h2>It lives <span class="accent">inside</span> LALIGA — not beside it.</h2>
+  <div class="grid g2" style="margin-top:.24in">
+    <div class="grid" style="align-content:start;gap:.14in">
+      <div class="card"><h3>App</h3><p>A tab in the official LALIGA app. Existing SSO — one identity, rank travels with the fan. No new account.</p></div>
+      <div class="card"><h3>Broadcast</h3><p>The Heat as a clean lower-third. Aggregate only; never a named fan. One line partners can take.</p></div>
+      <div class="card"><h3>Stadium</h3><p>The same call on the ribbon at half-time. People in the ground and at home are one stand.</p></div>
+    </div>
+    <div class="grid" style="align-content:start;gap:.14in">
+      <div class="card"><h3>Data</h3><p>A feed adapter maps rights-cleared match events into the Mosaico contract. The prototype already runs on that shape with a mock feed.</p></div>
+      <div class="card"><h3>Commercial</h3><p>Sponsored moments and blocks, with the league desk owning the question and the result.</p></div>
+      <div class="card"><h3>Rollout</h3><p>One club, one matchday pilot → league-wide ES → LATAM → MENA (AR/RTL). Each step reuses the same loop.</p></div>
+    </div>
+  </div>
+  <div class="callout" style="margin-top:.22in">
+    <p style="font-size:11pt"><b>What we need from LALIGA:</b> feed access for one pilot club, SSO, a brand review, and a matchday to prove the loop in public.</p>
+  </div>
+  <div class="pageno">08</div>
+</section>
+
+<!-- 9 -->
+<section class="slide">
+  <p class="kicker">08 · Success metrics</p>
+  <h2>One north star, measured from <span class="accent">real events</span>.</h2>
+  <div class="callout" style="margin-top:.2in">
+    <p style="font-size:12pt"><b>North star: Weekly Active Predictors (WAP) per matchday</b> — fans who make at least one call in a rolling seven-day window. It rewards recurrence, not reach.</p>
+  </div>
+  <table style="margin-top:.2in">
+    <thead><tr><th>KPI</th><th class="num">Model</th><th>How the prototype evidences it</th></tr></thead>
+    <tbody>
+      <tr><td>Matchday participation rate</td><td class="num">8–15%</td><td>Voters ÷ matchday reach, from one event row per vote.</td></tr>
+      <tr><td>Calls per fan per match</td><td class="num">4.6</td><td>Vote + forecast events grouped by fan and match.</td></tr>
+      <tr><td>D7 return, ritual cohort</td><td class="num">55–70%</td><td>Cohort of fans who completed the ritual, tracked by fan id.</td></tr>
+      <tr><td>Block join rate</td><td class="num">12%</td><td>Join events ÷ active fans.</td></tr>
+      <tr><td>Second-screen attach</td><td class="num">3–6%</td><td>Broadcast QR/deep-link opens reconciled to matchday reach.</td></tr>
+      <tr><td>Reveal cards shared</td><td class="num">18%</td><td>Share events ÷ Reveal views.</td></tr>
+    </tbody>
+  </table>
+  <div class="callout" style="margin-top:.2in">
+    <p style="font-size:11pt"><b>Proof at Demo Day:</b> open <span class="accent">/board</span> — event counts, dedupe and leaderboards are computed from the same rows these KPIs read. Nothing here is a screenshot.</p>
+  </div>
+  <p class="muted" style="margin-top:.12in;font-size:9.5pt">Figures are modelled assumptions, clearly labelled; every prototype action writes an event, so each row becomes measurable in the pilot. A/B design: ritual-first vs value-first onboarding.</p>
+  <div class="pageno">09</div>
+</section>
+
+<!-- 10 -->
+<section class="slide">
+  <p class="kicker">09 · Economic sustainability</p>
+  <h2>Sponsorship attached to <span class="accent">attention</span>, not impressions.</h2>
+  <div class="grid g3" style="margin-top:.24in">
+    <div class="card"><h3>Presented moments</h3><p>One curated Moment per match carries a named partner. They never set the question or touch the result.</p></div>
+    <div class="card"><h3>Block sponsorship</h3><p>Clubs, bars and cities host blocks — a second, local line of partnership with measurable membership.</p></div>
+    <div class="card"><h3>Season partner</h3><p>A presenting partner across the season arc, leaderboards and the Reveal card.</p></div>
+  </div>
+  <div class="split" style="margin-top:.26in">
+    <div>
+      <h3 class="pitch" style="margin-bottom:.08in">Why the cost base is honest</h3>
+      <p>Built to prove itself on free tiers: scale-to-zero Postgres, static/edge delivery,
+      one append-only table. Infrastructure cost stays near zero until usage earns the
+      right to spend.</p>
+      <p class="muted" style="margin-top:.1in;font-size:10.5pt">"No cost until proven" is the operating model, not a slide promise.</p>
+    </div>
+    <div class="card">
+      <h3>Guardrails</h3>
+      <ul class="ul" style="margin-top:.06in">
+        <li>No wagering, odds, stakes or cash-out.</li>
+        <li>Sponsor never influences questions or results.</li>
+        <li>Rank cannot be bought — protecting the product's credibility.</li>
+        <li>Ad load capped so the night never feels like inventory.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout" style="margin-top:.2in">
+    <p style="font-size:11pt"><b>Revenue order:</b> prove attention → sell the moment → renew on measured recall. No inventory is sold before the loop works.</p>
+  </div>
+  <div class="pageno">10</div>
+</section>
+
+<!-- 11 -->
+<section class="slide">
+  <p class="kicker">10 · Risk mitigation</p>
+  <h2>What could go wrong — and how we <span class="accent">close it</span>.</h2>
+  <table style="margin-top:.22in">
+    <thead><tr><th style="width:20%">Risk</th><th>Mitigation</th></tr></thead>
+    <tbody>
+      <tr><td><b>Rights &amp; IP</b></td><td>Only rights-cleared official feeds; league desk writes questions; no club marks without clearance; aggregate-only broadcast.</td></tr>
+      <tr><td><b>Data protection</b></td><td>GDPR + UAE PDPL. Pseudonymous fan id, data minimisation, age gate, defined retention, aggregate-only outputs.</td></tr>
+      <tr><td><b>Regulation</b></td><td>Points-only, no stakes or odds, no cash-out; clear T&amp;Cs; local counsel per market before launch.</td></tr>
+      <tr><td><b>Scale</b></td><td>Edge delivery, event-driven writes, Postgres + cache, load model for matchday peaks, graceful offline fallback.</td></tr>
+      <tr><td><b>Integrity</b></td><td>Server-side scoring, one vote per fan per moment, rate limits, anomaly detection; no client-trusted points.</td></tr>
+      <tr><td><b>Dependency</b></td><td>Feed adapter contract with a mock fallback; pilot scoped to one club so the loop is proven before league-wide rollout.</td></tr>
+    </tbody>
+  </table>
+  <div class="pageno">11</div>
+</section>
+
+<!-- 12 -->
+<section class="slide">
+  <p class="kicker">11 · Roadmap &amp; ask</p>
+  <h2>Prove the loop in 90 days. <span class="accent">Then scale the season.</span></h2>
+  <div class="grid g3" style="margin-top:.24in">
+    <div class="card"><h3>0–30 days</h3><p>Pilot with one club: official feed, SSO, live moments on one matchday. Success = WAP and D7 baselines established.</p></div>
+    <div class="card"><h3>30–90 days</h3><p>League-wide matchdays, blocks, sponsor pilot, broadcast lower-third. Success = recurring participation and first sponsor renewal.</p></div>
+    <div class="card"><h3>Season 2</h3><p>Season partner, LATAM and MENA rollout, stadium ribbon, deeper narrative metrics.</p></div>
+  </div>
+  <div class="split" style="margin-top:.28in">
+    <div>
+      <h3>The ask</h3>
+      <ul class="ul" style="margin-top:.06in">
+        <li>One club and one matchday to run the pilot.</li>
+        <li>Feed access and SSO for that pilot.</li>
+        <li>A brand review before public launch.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Team</h3>
+      <p>Jones Kapedo — product &amp; engineering. One builder, one thesis, and a working
+      prototype: the loop is not a mock-up.</p>
+      <p class="muted" style="margin-top:.1in;font-size:10pt">Built for the Beyond The Match Challenge.</p>
+    </div>
+  </div>
+  <div class="callout" style="margin-top:.24in">
+    <p style="font-size:13pt"><b>Football already has 90 minutes of attention. Give fans something to do with it — and a reason to come back on Tuesday.</b></p>
+  </div>
+  <div class="pageno">12</div>
+</section>
+
+</body>
+</html>

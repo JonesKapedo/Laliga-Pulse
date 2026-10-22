@@ -1,6 +1,6 @@
-# LALIGA Pulse
+# LALIGA Mosaico
 
-A fan-engagement prototype for the **LALIGA Beyond The Match Challenge** (Ignyte). Pulse turns a match night into a shared ritual: call how the night feels, back your club, register your presence, and watch the stand's collective pulse move in real time.
+A fan-engagement prototype for the **LALIGA Beyond The Match Challenge** (Ignyte). *Every fan is a tile. Together, the picture.* Mosaico turns a match night into a shared ritual: call the moments, back your club, and watch the stand resolve into one image while a season-long reputation accumulates.
 
 Built with TanStack Start, React 19, Tailwind CSS, and Zustand. Data lives in the browser (`localStorage`); the optional auth/database layer uses Better Auth + Postgres (Neon) or an embedded PGlite fallback for local development.
 

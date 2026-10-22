@@ -1,6 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { CLUBS, LEADERBOARD, RANKS } from "@/data/pulse-data";
+import {
+  CLUBS,
+  LEADERBOARD,
+  RANKS,
+  rankFromPoints,
+  type ClubId,
+} from "@/data/pulse-data";
 import { usePulse, useRank } from "@/store/pulse-store";
+import { useFanId, useLeaderboard, useSeason } from "@/lib/use-participation";
 import { Crest } from "@/components/crest";
 import { SectionLabel } from "@/components/pulse-bits";
 import { cn } from "@/lib/utils";
@@ -13,12 +20,29 @@ function RankPage() {
   const setName = usePulse((s) => s.setName);
   const clubId = usePulse((s) => s.clubId);
   const rank = useRank();
+  const live = useLeaderboard("global", null, null, 12);
+  const season = useSeason();
+  const fanId = useFanId();
 
-  const board = LEADERBOARD.map((row) =>
-    row.you
-      ? { ...row, name, club: clubId, points, title: rank.current.title }
-      : row,
-  ).sort((a, b) => b.points - a.points);
+  const asClub = (v: string): ClubId =>
+    v in CLUBS ? (v as ClubId) : clubId;
+
+  const board =
+    live && live.length
+      ? live.map((r) => ({
+          name: r.handle,
+          club: asClub(r.clubId),
+          title: rankFromPoints(r.points).current.title,
+          points: r.points,
+          you: fanId ? r.id === fanId : false,
+        }))
+      : LEADERBOARD.map((row) =>
+          row.you
+            ? { ...row, name, club: clubId, points, title: rank.current.title }
+            : row,
+        );
+
+  board.sort((a, b) => b.points - a.points);
 
   return (
     <div className="space-y-8">
@@ -47,7 +71,7 @@ function RankPage() {
             </div>
           </div>
           <div className="text-right">
-            <p className="text-xs tracking-wide text-muted uppercase">Pulse points</p>
+            <p className="text-xs tracking-wide text-muted uppercase">Tiles</p>
             <p className="font-display text-3xl tabular-nums">{points}</p>
           </div>
         </div>
@@ -63,6 +87,14 @@ function RankPage() {
             />
           </div>
         </div>
+        {season && (
+          <p className="mt-3 text-xs text-muted">
+            Season standing:{" "}
+            <span className="text-fg tabular-nums">#{season.rank}</span> of{" "}
+            {season.fans.toLocaleString("en-GB")} fans ·{" "}
+            {season.points.toLocaleString("en-GB")} league points
+          </p>
+        )}
       </section>
 
       <section>

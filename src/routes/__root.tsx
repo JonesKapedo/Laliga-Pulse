@@ -4,10 +4,10 @@ import { AppShell } from "@/components/app-shell";
 import { Toaster } from "sonner";
 import appCss from "../styles.css?url";
 
-const APP_NAME = "LALIGA Pulse";
+const APP_NAME = "LALIGA Mosaico";
 const APP_URL = (import.meta.env.VITE_APP_URL ?? "").replace(/\/+$/, "");
 const APP_DESCRIPTION =
-  "The collective voice of LALIGA fans. Call the night. Belong to the stand.";
+  "Every fan is a tile. Together, the picture.";
 
 export const Route = createRootRoute({
   notFoundComponent: () => (

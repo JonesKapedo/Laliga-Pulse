@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ECHOES, MISSIONS, SEASON_ARC } from "@/data/pulse-data";
 import { usePulse } from "@/store/pulse-store";
+import { useSeason } from "@/lib/use-participation";
 import { Button } from "@/components/ui/button";
 import { SectionLabel } from "@/components/pulse-bits";
 import { toast } from "sonner";
@@ -11,6 +12,7 @@ function SeasonPage() {
   const ritualDone = usePulse((s) => s.ritualDone);
   const votes = usePulse((s) => s.votes);
   const voteCount = Object.keys(votes).length;
+  const season = useSeason();
 
   const done: Record<string, boolean> = {
     m1: ritualDone,
@@ -27,11 +29,20 @@ function SeasonPage() {
           <SectionLabel>Between matchdays</SectionLabel>
           <h1 className="mt-2 font-display text-4xl tracking-tight">The week still asks for you</h1>
           <p className="mt-2 max-w-xl text-sm text-muted">
-            Pulse is not a match-only switch. The table moves, old nights echo, and the
+            Mosaico is not a match-only switch. The table moves, old nights echo, and the
             stand has work before the next tunnel.
           </p>
         </div>
       </header>
+
+      {season && (
+        <div className="rounded-xl border border-border bg-surface p-5 text-sm">
+          Season standing: <span className="font-display">#{season.rank}</span> of{" "}
+          {season.fans.toLocaleString("en-GB")} fans ·{" "}
+          <span className="font-display">{season.points.toLocaleString("en-GB")}</span>{" "}
+          points this season. Reputation carries between matchdays.
+        </div>
+      )}
 
       <section>
         <SectionLabel>The week’s work</SectionLabel>
@@ -77,7 +88,7 @@ function SeasonPage() {
       <section>
         <SectionLabel>Echoes</SectionLabel>
         <p className="mt-2 max-w-xl text-sm text-muted">
-          Old Pulse nights do not disappear. They wait for a quiet Tuesday.
+          Old Mosaico nights do not disappear. They wait for a quiet Tuesday.
         </p>
         <div className="mt-4 grid gap-3 md:grid-cols-2">
           {ECHOES.map((e) => (

@@ -1,7 +1,7 @@
 {
-  "name": "LALIGA Pulse",
-  "short_name": "Pulse",
-  "description": "The collective voice of LALIGA fans. Call the night. Belong to the stand.",
+  "name": "LALIGA Mosaico",
+  "short_name": "Mosaico",
+  "description": "Every fan is a tile. Together, the picture.",
   "id": "/",
   "start_url": "/",
   "scope": "/",

@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { MOMENTS } from "@/data/pulse-data";
 import { usePulse } from "@/store/pulse-store";
+import { useStats } from "@/lib/use-participation";
 import { Button } from "@/components/ui/button";
 import { SectionLabel } from "@/components/pulse-bits";
 
@@ -11,7 +12,7 @@ const KPIS = [
     label: "Fans who call at least once",
     model: "38%",
     now: "This night",
-    note: "Share of active LALIGA app users who lock a Pulse Moment.",
+    note: "Share of active LALIGA app users who lock a Moment.",
   },
   {
     label: "Calls per fan in the ninety",
@@ -29,7 +30,7 @@ const KPIS = [
     label: "Verdict cards shared",
     model: "18%",
     now: "After the whistle",
-    note: "The Official Fan Pulse leaving the app and starting a row.",
+    note: "The Heat leaving the app and starting a row.",
   },
   {
     label: "Opens with no match on",
@@ -44,6 +45,7 @@ function Board() {
   const ritualDone = usePulse((s) => s.ritualDone);
   const calls = Object.keys(votes).length;
   const lang = usePulse((s) => s.lang);
+  const stats = useStats();
 
   return (
     <div className="space-y-8">
@@ -64,7 +66,7 @@ function Board() {
           <SectionLabel>App</SectionLabel>
           <h2 className="mt-2 font-display text-xl">A tab, not a side app</h2>
           <p className="mt-2 text-sm text-muted">
-            Pulse sits inside the official LALIGA app. Same login the league already has.
+            Mosaico sits inside the official LALIGA app. Same login the league already has.
             Your rank travels with you.
           </p>
         </article>
@@ -72,7 +74,7 @@ function Board() {
           <SectionLabel>Broadcast</SectionLabel>
           <h2 className="mt-2 font-display text-xl">The lower third</h2>
           <p className="mt-2 text-sm text-muted">
-            The Official Fan Pulse is a clean graphic partners can take. One line. The
+            The Heat is a clean graphic partners can take. One line. The
             stand’s call. No clutter on the picture.
           </p>
         </article>
@@ -93,6 +95,14 @@ function Board() {
           {ritualDone ? ", and you walked through the tunnel." : "."} The figures below are
           the season model those actions are built to move.
         </p>
+        {stats && (
+          <div className="mt-4 rounded-lg border border-border bg-raised p-4 text-sm">
+            <span className="font-display">{stats.votes.toLocaleString("en-GB")}</span> calls
+            from <span className="font-display">{stats.fans.toLocaleString("en-GB")}</span>{" "}
+            fans across <span className="font-display">{stats.moments}</span> moments — live
+            from the events table, not a mock.
+          </div>
+        )}
         <ul className="mt-4 grid gap-3 md:grid-cols-2">
           {KPIS.map((k) => (
             <li key={k.label} className="rounded-xl border border-border bg-surface p-5">
@@ -109,7 +119,7 @@ function Board() {
         <SectionLabel>How it pays for itself</SectionLabel>
         <h2 className="mt-2 font-display text-2xl">A partner on the moment, not a book</h2>
         <p className="mt-2 max-w-2xl text-sm text-muted">
-          One curated Pulse Moment a match can carry a named partner. They do not set the
+          One curated Moment a match can carry a named partner. They do not set the
           question, they do not touch the result, and there is no cash-out, no odds, no
           stake. The league keeps the voice. The partner keeps the association with a night
           people actually felt.

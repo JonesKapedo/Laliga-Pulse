@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { MOMENTS, winningOption } from "@/data/pulse-data";
 import { usePulse, useRank } from "@/store/pulse-store";
+import { useSeason } from "@/lib/use-participation";
 import { Button } from "@/components/ui/button";
 import { Scoreboard, SectionLabel } from "@/components/pulse-bits";
 
@@ -12,6 +13,7 @@ function Verdict() {
   const feel = usePulse((s) => s.feel);
   const focusPlayer = usePulse((s) => s.focusPlayer);
   const rank = useRank();
+  const season = useSeason();
   const motm = MOMENTS.find((m) => m.id === "motm")!;
   const motmWin = winningOption(motm);
 
@@ -48,7 +50,7 @@ function Verdict() {
       <section className="grid gap-4 md:grid-cols-3">
         <Stat label="Your calls" value={`${calls}/${MOMENTS.length}`} />
         <Stat label="With the stand" value={String(withStand)} />
-        <Stat label="Pulse points" value={String(points)} />
+        <Stat label="Tiles" value={String(points)} />
       </section>
 
       <section className="rounded-xl border border-border bg-surface p-5">
@@ -86,6 +88,12 @@ function Verdict() {
           <SectionLabel>Standing</SectionLabel>
           <p className="mt-1 font-display text-2xl">{rank.current.title}</p>
           <p className="text-sm text-muted">{rank.current.copy}</p>
+          {season && (
+            <p className="mt-2 text-xs text-muted">
+              #{season.rank} of {season.fans.toLocaleString("en-GB")} in the season ·{" "}
+              {season.points.toLocaleString("en-GB")} pts
+            </p>
+          )}
         </div>
         <div className="flex gap-2">
           <Button asChild>
