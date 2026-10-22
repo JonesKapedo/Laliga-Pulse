@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { FEED, MOMENTS, winningOption } from "@/data/pulse-data";
 import { usePulse, type Flash } from "@/store/pulse-store";
+import { useTally } from "@/lib/use-participation";
 import { Button } from "@/components/ui/button";
 import {
   Heartbeat,
@@ -86,6 +87,9 @@ function MatchRoom() {
   const voted = votes[moment.id];
   const showResult = revealed.includes(moment.id);
   const winner = winningOption(moment);
+  const tally = useTally(moment.id, showResult);
+  const shareFor = (optId: string, fallback: number) =>
+    tally?.options.find((o) => o.optionId === optId)?.share ?? fallback;
   const live = phase === "live";
   const scores = useMemo(() => {
     if (moment.minute < 12) return { home: 0, away: 0 };
@@ -109,7 +113,7 @@ function MatchRoom() {
         <article className="rounded-xl border border-border bg-surface p-5 sm:p-7">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <SectionLabel>
-              Pulse moment · {moment.minuteLabel}
+              Moment · {moment.minuteLabel}
             </SectionLabel>
             <span className="rounded-full border border-border px-2.5 py-1 text-[11px] tracking-wide text-muted uppercase">
               {moment.heading}
@@ -123,7 +127,7 @@ function MatchRoom() {
           <div className="mt-6 space-y-2">
             {moment.options.map((opt) => {
               const selected = voted === opt.id;
-              const pct = showResult ? opt.share : 0;
+              const pct = showResult ? shareFor(opt.id, opt.share) : 0;
               return (
                 <button
                   key={opt.id}
@@ -165,8 +169,14 @@ function MatchRoom() {
           {showResult && (
             <div className="mt-6 space-y-3">
               <div className="rounded-lg bg-raised p-4">
-                <SectionLabel>Official Fan Pulse</SectionLabel>
+                <SectionLabel>Official Heat read</SectionLabel>
                 <p className="mt-2 text-sm">{moment.narrative[winner.id]}</p>
+                {tally && tally.total > 0 && (
+                  <p className="mt-2 text-xs text-muted">
+                    {tally.total.toLocaleString("en-GB")} calls from the stand on this
+                    moment, live.
+                  </p>
+                )}
                 {voted && voted !== winner.id && (
                   <p className="mt-2 text-xs text-muted">
                     You went your own way. That still counts — the stand is not a chorus of

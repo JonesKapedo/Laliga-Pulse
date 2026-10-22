@@ -6,6 +6,7 @@ import {
   type Phase,
   rankFromPoints,
 } from "@/data/pulse-data";
+import { setTelemetryIdentity, track } from "@/lib/telemetry";
 
 export type Feel = "hungry" | "nervous" | "calm" | "loud";
 
@@ -116,8 +117,15 @@ export const usePulse = create<PulseState>()(
       amended: false,
       settled: false,
       lines: [],
-      setName: (name) => set({ name: name.slice(0, 24) || "You" }),
-      setClub: (clubId) => set({ clubId }),
+      setName: (name) => {
+        const clean = name.slice(0, 24) || "You";
+        setTelemetryIdentity({ handle: clean });
+        set({ name: clean });
+      },
+      setClub: (clubId) => {
+        setTelemetryIdentity({ clubId });
+        set({ clubId });
+      },
       setLang: (lang) => set({ lang }),
       completeRitual: (feel, focusPlayer) => {
         const { ritualDone, points } = get();
@@ -127,6 +135,7 @@ export const usePulse = create<PulseState>()(
           focusPlayer,
           points: ritualDone ? points : points + 400,
         });
+        track("ritual", { value: feel === "loud" ? 92 : 60 });
       },
       castVote: (momentId, optionId) => {
         const { votes, revealed, points } = get();
@@ -141,6 +150,7 @@ export const usePulse = create<PulseState>()(
           revealed: revealed.includes(momentId) ? revealed : [...revealed, momentId],
           points: points + bonus + (withStand ? 200 : 80),
         });
+        track("vote", { momentId, optionId });
       },
       goToMoment: (index) => {
         const i = Math.max(0, Math.min(MOMENTS.length - 1, index));
@@ -247,6 +257,7 @@ export const usePulse = create<PulseState>()(
       saveForecast: (card, amended) => {
         if (get().phase === "whistle") return;
         set({ forecast: card, amended: amended || get().amended });
+        track("forecast");
       },
       registerFan: ({ age, username, clubId }) => {
         const { forecast, settled, points } = get();
@@ -259,6 +270,7 @@ export const usePulse = create<PulseState>()(
           points: points + bonus,
           settled: true,
         });
+        track("register");
       },
       say: (text) => {
         const clean = text.trim().slice(0, 180);
@@ -270,6 +282,7 @@ export const usePulse = create<PulseState>()(
           ].slice(-40),
           points: get().points + (get().lines.length < 4 ? 40 : 0),
         });
+        track("comment");
       },
     }),
     {

@@ -6,6 +6,7 @@ import { GROUNDS, WIRE } from "@/data/players";
 import { usePulse } from "@/store/pulse-store";
 import { Crest } from "@/components/crest";
 import { ForecastCard } from "@/components/forecast-card";
+import { PodPanel } from "@/components/pod-panel";
 import { SectionLabel } from "@/components/pulse-bits";
 import { cn } from "@/lib/utils";
 
@@ -23,7 +24,7 @@ function StandPage() {
   const minute = MOMENTS[momentIndex]?.minute ?? 0;
   const wire = WIRE.filter((w) => w.minute <= minute);
   const feed = [
-    ...wire.map((w) => ({ id: `wire-${w.minute}`, author: "Pulse wire", text: w.text })),
+    ...wire.map((w) => ({ id: `wire-${w.minute}`, author: "Mosaico wire", text: w.text })),
     ...roomFeed(clubId, phase),
     ...lines,
   ];
@@ -119,7 +120,10 @@ function StandPage() {
           </button>
         </form>
       </section>
-      <ForecastCard />
+      <div className="space-y-4">
+        <ForecastCard />
+        <PodPanel />
+      </div>
       </div>
     </div>
   );

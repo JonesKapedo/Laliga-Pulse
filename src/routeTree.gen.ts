@@ -16,6 +16,12 @@ import { Route as RankRouteImport } from './routes/rank'
 import { Route as SeasonRouteImport } from './routes/season'
 import { Route as StandRouteImport } from './routes/stand'
 import { Route as VerdictRouteImport } from './routes/verdict'
+import { Route as ApiEventsRouteImport } from './routes/api/events'
+import { Route as ApiLeaderboardRouteImport } from './routes/api/leaderboard'
+import { Route as ApiMeRouteImport } from './routes/api/me'
+import { Route as ApiPodsRouteImport } from './routes/api/pods'
+import { Route as ApiStatsRouteImport } from './routes/api/stats'
+import { Route as ApiTallyRouteImport } from './routes/api/tally'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
 const IndexRoute = IndexRouteImport.update({
@@ -53,6 +59,36 @@ const VerdictRoute = VerdictRouteImport.update({
   path: '/verdict',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiEventsRoute = ApiEventsRouteImport.update({
+  id: '/api/events',
+  path: '/api/events',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiLeaderboardRoute = ApiLeaderboardRouteImport.update({
+  id: '/api/leaderboard',
+  path: '/api/leaderboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiMeRoute = ApiMeRouteImport.update({
+  id: '/api/me',
+  path: '/api/me',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPodsRoute = ApiPodsRouteImport.update({
+  id: '/api/pods',
+  path: '/api/pods',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiStatsRoute = ApiStatsRouteImport.update({
+  id: '/api/stats',
+  path: '/api/stats',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiTallyRoute = ApiTallyRouteImport.update({
+  id: '/api/tally',
+  path: '/api/tally',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -67,6 +103,12 @@ export interface FileRoutesByFullPath {
   '/season': typeof SeasonRoute
   '/stand': typeof StandRoute
   '/verdict': typeof VerdictRoute
+  '/api/events': typeof ApiEventsRoute
+  '/api/leaderboard': typeof ApiLeaderboardRoute
+  '/api/me': typeof ApiMeRoute
+  '/api/pods': typeof ApiPodsRoute
+  '/api/stats': typeof ApiStatsRoute
+  '/api/tally': typeof ApiTallyRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesByTo {
@@ -77,6 +119,12 @@ export interface FileRoutesByTo {
   '/season': typeof SeasonRoute
   '/stand': typeof StandRoute
   '/verdict': typeof VerdictRoute
+  '/api/events': typeof ApiEventsRoute
+  '/api/leaderboard': typeof ApiLeaderboardRoute
+  '/api/me': typeof ApiMeRoute
+  '/api/pods': typeof ApiPodsRoute
+  '/api/stats': typeof ApiStatsRoute
+  '/api/tally': typeof ApiTallyRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesById {
@@ -88,6 +136,12 @@ export interface FileRoutesById {
   '/season': typeof SeasonRoute
   '/stand': typeof StandRoute
   '/verdict': typeof VerdictRoute
+  '/api/events': typeof ApiEventsRoute
+  '/api/leaderboard': typeof ApiLeaderboardRoute
+  '/api/me': typeof ApiMeRoute
+  '/api/pods': typeof ApiPodsRoute
+  '/api/stats': typeof ApiStatsRoute
+  '/api/tally': typeof ApiTallyRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRouteTypes {
@@ -100,6 +154,12 @@ export interface FileRouteTypes {
     | '/season'
     | '/stand'
     | '/verdict'
+    | '/api/events'
+    | '/api/leaderboard'
+    | '/api/me'
+    | '/api/pods'
+    | '/api/stats'
+    | '/api/tally'
     | '/api/auth/$'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -110,6 +170,12 @@ export interface FileRouteTypes {
     | '/season'
     | '/stand'
     | '/verdict'
+    | '/api/events'
+    | '/api/leaderboard'
+    | '/api/me'
+    | '/api/pods'
+    | '/api/stats'
+    | '/api/tally'
     | '/api/auth/$'
   id:
     | '__root__'
@@ -120,6 +186,12 @@ export interface FileRouteTypes {
     | '/season'
     | '/stand'
     | '/verdict'
+    | '/api/events'
+    | '/api/leaderboard'
+    | '/api/me'
+    | '/api/pods'
+    | '/api/stats'
+    | '/api/tally'
     | '/api/auth/$'
   fileRoutesById: FileRoutesById
 }
@@ -131,6 +203,12 @@ export interface RootRouteChildren {
   SeasonRoute: typeof SeasonRoute
   StandRoute: typeof StandRoute
   VerdictRoute: typeof VerdictRoute
+  ApiEventsRoute: typeof ApiEventsRoute
+  ApiLeaderboardRoute: typeof ApiLeaderboardRoute
+  ApiMeRoute: typeof ApiMeRoute
+  ApiPodsRoute: typeof ApiPodsRoute
+  ApiStatsRoute: typeof ApiStatsRoute
+  ApiTallyRoute: typeof ApiTallyRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
@@ -185,6 +263,48 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VerdictRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/events': {
+      id: '/api/events'
+      path: '/api/events'
+      fullPath: '/api/events'
+      preLoaderRoute: typeof ApiEventsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/leaderboard': {
+      id: '/api/leaderboard'
+      path: '/api/leaderboard'
+      fullPath: '/api/leaderboard'
+      preLoaderRoute: typeof ApiLeaderboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/me': {
+      id: '/api/me'
+      path: '/api/me'
+      fullPath: '/api/me'
+      preLoaderRoute: typeof ApiMeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/pods': {
+      id: '/api/pods'
+      path: '/api/pods'
+      fullPath: '/api/pods'
+      preLoaderRoute: typeof ApiPodsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/stats': {
+      id: '/api/stats'
+      path: '/api/stats'
+      fullPath: '/api/stats'
+      preLoaderRoute: typeof ApiStatsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/tally': {
+      id: '/api/tally'
+      path: '/api/tally'
+      fullPath: '/api/tally'
+      preLoaderRoute: typeof ApiTallyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
@@ -203,6 +323,12 @@ const rootRouteChildren: RootRouteChildren = {
   SeasonRoute: SeasonRoute,
   StandRoute: StandRoute,
   VerdictRoute: VerdictRoute,
+  ApiEventsRoute: ApiEventsRoute,
+  ApiLeaderboardRoute: ApiLeaderboardRoute,
+  ApiMeRoute: ApiMeRoute,
+  ApiPodsRoute: ApiPodsRoute,
+  ApiStatsRoute: ApiStatsRoute,
+  ApiTallyRoute: ApiTallyRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport
