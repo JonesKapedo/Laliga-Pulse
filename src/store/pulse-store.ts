@@ -32,6 +32,11 @@ export const NIGHT_TRUTH: Forecast = {
   first: "home",
 };
 
+export const SEED_EMOTIONS = [
+  { minute: 0, value: 42 },
+  { minute: 4, value: 48 },
+];
+
 export function forecastPoints(card: Forecast) {
   let n = 0;
   if (card.result === NIGHT_TRUTH.result) n += 500;
@@ -93,7 +98,7 @@ export const usePulse = create<PulseState>()(
     (set, get) => ({
       name: "You",
       clubId: "rma",
-      points: 2400,
+      points: 0,
       ritualDone: false,
       feel: null,
       focusPlayer: null,
@@ -101,10 +106,7 @@ export const usePulse = create<PulseState>()(
       revealed: [],
       momentIndex: 0,
       phase: "tunnel",
-      emotions: [
-        { minute: 0, value: 42 },
-        { minute: 4, value: 48 },
-      ],
+      emotions: SEED_EMOTIONS,
       temperature: 48,
       pressure: 36,
       lang: "en",
@@ -222,10 +224,7 @@ export const usePulse = create<PulseState>()(
           phase: "tunnel",
           temperature: 48,
           pressure: 36,
-          emotions: [
-            { minute: 0, value: 42 },
-            { minute: 4, value: 48 },
-          ],
+          emotions: SEED_EMOTIONS,
           script: [],
           scriptId: get().scriptId + 1,
           scoreSide: null,
@@ -287,7 +286,18 @@ export const usePulse = create<PulseState>()(
     }),
     {
       name: "laliga-pulse-v1",
+      version: 2,
       skipHydration: true,
+      migrate: (persisted) => {
+        const state = persisted as PulseState;
+        return {
+          ...state,
+          points: 0,
+          emotions: SEED_EMOTIONS,
+          temperature: 48,
+          pressure: 36,
+        };
+      },
       partialize: (s) => ({
         name: s.name,
         clubId: s.clubId,

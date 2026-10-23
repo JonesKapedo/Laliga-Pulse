@@ -3,7 +3,7 @@ import { MOMENTS } from "@/data/pulse-data";
 import { usePulse } from "@/store/pulse-store";
 import { useStats } from "@/lib/use-participation";
 import { Button } from "@/components/ui/button";
-import { SectionLabel } from "@/components/pulse-bits";
+import { PageHeader, SectionLabel, Stat } from "@/components/pulse-bits";
 
 export const Route = createFileRoute("/board")({ component: Board });
 
@@ -49,17 +49,43 @@ function Board() {
 
   return (
     <div className="space-y-8">
-      <header>
-        <SectionLabel>{lang === "es" ? "El libro" : "The book"}</SectionLabel>
-        <h1 className="mt-2 font-display text-4xl tracking-tight">
-          {lang === "es" ? "Cómo vive esto en LALIGA" : "How this lives inside LALIGA"}
-        </h1>
-        <p className="mt-2 max-w-2xl text-sm text-muted">
-          {lang === "es"
+      <PageHeader
+        kicker={lang === "es" ? "El libro" : "The case"}
+        title={
+          lang === "es" ? "Cómo vive esto en LALIGA" : "How this lives inside LALIGA"
+        }
+        lede={
+          lang === "es"
             ? "No es una activación de un partido. Es una capa oficial: la app, la retransmisión, el estadio, y una noche que sigue el martes."
-            : "Not a one-match activation. An official layer across the app, the broadcast, the ground, and the Tuesday after."}
-        </p>
-      </header>
+            : "Not a one-match activation. An official layer across the app, the broadcast, the ground, and the Tuesday after."
+        }
+      />
+
+      {stats && (
+        <section className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+          <Stat
+            label="Fans"
+            value={stats.fans.toLocaleString("en-GB")}
+            hint="in the season"
+          />
+          <Stat
+            label="Calls"
+            value={stats.votes.toLocaleString("en-GB")}
+            hint={`${stats.votesToday.toLocaleString("en-GB")} today`}
+            tone="accent"
+          />
+          <Stat
+            label="Moments"
+            value={stats.moments.toLocaleString("en-GB")}
+            hint="called live"
+          />
+          <Stat
+            label="Events"
+            value={stats.events.toLocaleString("en-GB")}
+            hint="server-verified"
+          />
+        </section>
+      )}
 
       <section className="grid gap-3 sm:grid-cols-3">
         <article className="rounded-xl border border-border bg-surface p-5">

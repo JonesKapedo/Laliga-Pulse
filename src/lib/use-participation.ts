@@ -15,6 +15,20 @@ import { getFanId } from "@/lib/telemetry";
  * rendering their seeded fallback until the backend answers.
  */
 
+function useRefreshTick(intervalMs = 30_000): number {
+  const [tick, setTick] = useState(0);
+  useEffect(() => {
+    const bump = () => setTick((t) => t + 1);
+    const id = window.setInterval(bump, intervalMs);
+    window.addEventListener("mosaico:refresh", bump);
+    return () => {
+      window.clearInterval(id);
+      window.removeEventListener("mosaico:refresh", bump);
+    };
+  }, [intervalMs]);
+  return tick;
+}
+
 export function useFanId(): string | null {
   const [fanId, setFanId] = useState<string | null>(null);
   useEffect(() => {
@@ -23,7 +37,7 @@ export function useFanId(): string | null {
   return fanId;
 }
 
-export function useTally(momentId: string, enabled: boolean): Tally | null {
+export function useTally(momentId: string, enabled = true): Tally | null {
   const [tally, setTally] = useState<Tally | null>(null);
   useEffect(() => {
     if (!enabled) return;
@@ -45,6 +59,7 @@ export function useLeaderboard(
   limit = 12,
 ): LeaderboardRow[] | null {
   const [rows, setRows] = useState<LeaderboardRow[] | null>(null);
+  const tick = useRefreshTick();
   useEffect(() => {
     let alive = true;
     void fetchLeaderboard({ scope, clubId, podId, limit }).then((r) => {
@@ -53,19 +68,20 @@ export function useLeaderboard(
     return () => {
       alive = false;
     };
-  }, [scope, clubId, podId, limit]);
+  }, [scope, clubId, podId, limit, tick]);
   return rows;
 }
 
-export type Season = { points: number; rank: number; fans: number };
+export type Season = { points: number; rank: number | null; fans: number };
 
 export function useSeason(refresh = 0): Season | null {
   const [season, setSeason] = useState<Season | null>(null);
+  const tick = useRefreshTick();
   useEffect(() => {
     const fanId = getFanId();
     if (!fanId) return;
     let alive = true;
-    void fetch(`/api/me?fanId=${encodeURIComponent(fanId)}`)
+    void fetch(`/api/me?fanId=${encodeURIComponent(fanId)}`, { cache: "no-store" })
       .then((r) => (r.ok ? (r.json() as Promise<Season>) : null))
       .then((s) => {
         if (alive && s) setSeason(s);
@@ -74,7 +90,7 @@ export function useSeason(refresh = 0): Season | null {
     return () => {
       alive = false;
     };
-  }, [refresh]);
+  }, [refresh, tick]);
   return season;
 }
 
@@ -88,9 +104,10 @@ export type Stats = {
 
 export function useStats(refresh = 0): Stats | null {
   const [stats, setStats] = useState<Stats | null>(null);
+  const tick = useRefreshTick();
   useEffect(() => {
     let alive = true;
-    void fetch("/api/stats")
+    void fetch("/api/stats", { cache: "no-store" })
       .then((r) => (r.ok ? (r.json() as Promise<Stats>) : null))
       .then((s) => {
         if (alive && s) setStats(s);
@@ -99,12 +116,13 @@ export function useStats(refresh = 0): Stats | null {
     return () => {
       alive = false;
     };
-  }, [refresh]);
+  }, [refresh, tick]);
   return stats;
 }
 
 export function usePods(clubId?: string | null, refresh = 0): Pod[] | null {
   const [pods, setPods] = useState<Pod[] | null>(null);
+  const tick = useRefreshTick();
   useEffect(() => {
     let alive = true;
     void fetchPods(clubId).then((r) => {
@@ -113,6 +131,6 @@ export function usePods(clubId?: string | null, refresh = 0): Pod[] | null {
     return () => {
       alive = false;
     };
-  }, [clubId, refresh]);
+  }, [clubId, refresh, tick]);
   return pods;
 }

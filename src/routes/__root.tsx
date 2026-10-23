@@ -5,7 +5,7 @@ import { Toaster } from "sonner";
 import appCss from "../styles.css?url";
 
 const APP_NAME = "LALIGA Mosaico";
-const APP_URL = (import.meta.env.VITE_APP_URL ?? "").replace(/\/+$/, "");
+const APP_URL = (import.meta.env.VITE_APP_URL ?? "https://laliga-pulse.vercel.app").replace(/\/+$/, "");
 const APP_DESCRIPTION =
   "Every fan is a tile. Together, the picture.";
 

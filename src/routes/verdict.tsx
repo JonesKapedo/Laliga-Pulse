@@ -3,7 +3,7 @@ import { MOMENTS, winningOption } from "@/data/pulse-data";
 import { usePulse, useRank } from "@/store/pulse-store";
 import { useSeason } from "@/lib/use-participation";
 import { Button } from "@/components/ui/button";
-import { Scoreboard, SectionLabel } from "@/components/pulse-bits";
+import { PageHeader, Scoreboard, SectionLabel, Stat } from "@/components/pulse-bits";
 
 export const Route = createFileRoute("/verdict")({ component: Verdict });
 
@@ -25,13 +25,11 @@ function Verdict() {
 
   return (
     <div className="space-y-6">
-      <header>
-        <SectionLabel>After the whistle</SectionLabel>
-        <h1 className="mt-2 font-display text-4xl tracking-tight">The night, in the book</h1>
-        <p className="mt-2 max-w-xl text-sm text-muted">
-          The Official Fan Verdict is not a recap. It is what the stand called, kept.
-        </p>
-      </header>
+      <PageHeader
+        kicker="After the whistle"
+        title="The night, in the book"
+        lede="The Official Fan Verdict is not a recap. It is what the stand called, kept."
+      />
 
       <Scoreboard minuteLabel="FT" live={false} homeScore={1} awayScore={1} />
 
@@ -48,9 +46,14 @@ function Verdict() {
       </section>
 
       <section className="grid gap-4 md:grid-cols-3">
-        <Stat label="Your calls" value={`${calls}/${MOMENTS.length}`} />
-        <Stat label="With the stand" value={String(withStand)} />
-        <Stat label="Tiles" value={String(points)} />
+        <Stat label="Your calls" value={`${calls}/${MOMENTS.length}`} hint="on the night" />
+        <Stat label="With the stand" value={String(withStand)} hint="read the room" />
+        <Stat
+          label="Season tiles"
+          value={season ? season.points.toLocaleString("en-GB") : String(points)}
+          hint={season ? "league standing" : "local"}
+          tone="accent"
+        />
       </section>
 
       <section className="rounded-xl border border-border bg-surface p-5">
@@ -90,8 +93,17 @@ function Verdict() {
           <p className="text-sm text-muted">{rank.current.copy}</p>
           {season && (
             <p className="mt-2 text-xs text-muted">
-              #{season.rank} of {season.fans.toLocaleString("en-GB")} in the season ·{" "}
-              {season.points.toLocaleString("en-GB")} pts
+              {season.rank ? (
+                <>
+                  #{season.rank} of {season.fans.toLocaleString("en-GB")} in the season ·{" "}
+                  {season.points.toLocaleString("en-GB")} tiles
+                </>
+              ) : (
+                <>
+                  Unranked this season — no scoring calls logged yet.{" "}
+                  {season.fans.toLocaleString("en-GB")} fans are on the board.
+                </>
+              )}
             </p>
           )}
         </div>
@@ -104,15 +116,6 @@ function Verdict() {
           </Button>
         </div>
       </section>
-    </div>
-  );
-}
-
-function Stat({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-xl border border-border bg-surface p-5">
-      <p className="text-xs tracking-wide text-muted uppercase">{label}</p>
-      <p className="mt-2 font-display text-3xl tabular-nums">{value}</p>
     </div>
   );
 }

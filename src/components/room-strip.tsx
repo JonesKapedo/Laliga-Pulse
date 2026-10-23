@@ -15,16 +15,21 @@ export function RoomStrip() {
   return (
     <Link
       to="/stand"
-      className="flex h-8 items-center gap-3 overflow-hidden border-t border-border bg-bg px-4 text-xs"
+      className="block border-t border-border bg-bg transition-colors hover:bg-surface/40"
     >
-      <span className="shrink-0 font-display tracking-wider text-muted uppercase">
-        {CLUBS[clubId].short} · {size.toLocaleString("en-GB")} in
-      </span>
-      <span className="hidden shrink-0 text-muted sm:inline">{mood.calling}</span>
-      <span className="truncate text-fg">
-        <span className="text-muted">{latest.author} · </span>
-        {latest.text}
-      </span>
+      <div className="mx-auto flex h-8 max-w-6xl items-center gap-3 overflow-hidden px-4 text-xs">
+        <span className="flex shrink-0 items-center gap-1.5 font-display tracking-wider text-muted uppercase">
+          <span className="live-dot size-1 rounded-full bg-accent" />
+          {CLUBS[clubId].short} · {size.toLocaleString("en-GB")} in
+        </span>
+        <span className="shrink-0 text-faint">·</span>
+        <span className="hidden shrink-0 text-muted sm:inline">{mood.calling}</span>
+        <span className="hidden shrink-0 text-faint md:inline">·</span>
+        <span className="truncate text-fg">
+          <span className="text-muted">{latest.author} · </span>
+          {latest.text}
+        </span>
+      </div>
     </Link>
   );
 }

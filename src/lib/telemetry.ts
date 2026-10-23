@@ -62,7 +62,11 @@ export function track(name: string, payload: TrackPayload = {}): void {
       headers: { "content-type": "application/json" },
       body,
       keepalive: true,
-    }).catch(() => undefined);
+    })
+      .then((res) => {
+        if (res.ok) window.dispatchEvent(new Event("mosaico:refresh"));
+      })
+      .catch(() => undefined);
   } catch {
     // never let telemetry break an interaction
   }

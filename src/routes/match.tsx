@@ -87,7 +87,7 @@ function MatchRoom() {
   const voted = votes[moment.id];
   const showResult = revealed.includes(moment.id);
   const winner = winningOption(moment);
-  const tally = useTally(moment.id, showResult);
+  const tally = useTally(moment.id);
   const shareFor = (optId: string, fallback: number) =>
     tally?.options.find((o) => o.optionId === optId)?.share ?? fallback;
   const live = phase === "live";
@@ -144,7 +144,14 @@ function MatchRoom() {
                   )}
                 >
                   <div className="flex items-baseline justify-between gap-3">
-                    <span className="font-medium">{opt.label}</span>
+                    <span className="flex items-center gap-2 font-medium">
+                      {opt.label}
+                      {selected && (
+                        <span className="rounded-full bg-accent/15 px-1.5 py-0.5 text-[9px] tracking-[0.14em] text-accent uppercase">
+                          Your call
+                        </span>
+                      )}
+                    </span>
                     {showResult && (
                       <span className="font-display text-sm tabular-nums">{pct}%</span>
                     )}
@@ -206,7 +213,7 @@ function MatchRoom() {
 
           <div className="mt-6 flex flex-wrap gap-2">
             {momentIndex < MOMENTS.length - 1 ? (
-              <Button onClick={nextMoment}>Next moment in the ninety</Button>
+              <Button onClick={nextMoment}>Next moment</Button>
             ) : (
               <Button asChild>
                 <Link to="/verdict">Open the verdict</Link>

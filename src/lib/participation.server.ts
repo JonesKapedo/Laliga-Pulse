@@ -188,11 +188,11 @@ export async function getLeaderboard(opts: {
 /** A fan's season standing (points + position among all fans). */
 export async function getFanSeason(
   fanId: string,
-): Promise<{ points: number; rank: number; fans: number }> {
+): Promise<{ points: number; rank: number | null; fans: number }> {
   const id = cleanId(fanId);
-  if (!id) return { points: 0, rank: 0, fans: 0 };
+  if (!id) return { points: 0, rank: null, fans: 0 };
   const sql = await getSql();
-  const rows = await sql.query<{ points: number; rank: number; fans: number }>(
+  const rows = await sql.query<{ points: number; rank: number | null; fans: number }>(
     `with scored as (
        select e.fan_id as id, sum(e.points)::int as points
          from events e
@@ -201,11 +201,14 @@ export async function getFanSeason(
         group by e.fan_id
      )
      select coalesce((select points from scored where id = $1), 0) as points,
-            (select count(*)::int + 1 from scored where points > coalesce((select points from scored where id = $1), 0)) as rank,
+            case when coalesce((select points from scored where id = $1), 0) > 0
+                 then (select count(*)::int + 1 from scored where points > coalesce((select points from scored where id = $1), 0))
+                 else null
+            end as rank,
             (select count(*)::int from scored) as fans`,
     [id, String(SEASON_DAYS)],
   );
-  return rows[0] ?? { points: 0, rank: 0, fans: 0 };
+  return rows[0] ?? { points: 0, rank: null, fans: 0 };
 }
 
 /** Aggregate engagement figures — the numbers the deck cites as evidence. */
